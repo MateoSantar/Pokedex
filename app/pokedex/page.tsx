@@ -2,6 +2,7 @@ import { getPokemonPage, API_URL } from "@/app/lib/pokeapi";
 import Link from "next/link";
 import Image from "next/image";
 import SearchClient from "./SearchClient";
+import pokelogo from '@/public/pokelogo.svg';
 function getOffset(params: { page?: string }) {
     const page = Number(params.page ?? '1');
     return { page: Math.max(1, page), offset: (Math.max(1, page)) * 20 };
@@ -15,9 +16,13 @@ export default async function Pokedex({
     
 
     return (
-        <main className="max-w-4xl mx-auto p-6 space-y-4">
-            <h1 className="text-2xl font-semibold">Pokédex</h1>
-
+        <main className="max-w-4xl mx-auto my-4 p-4 space-y-4 bg-blue-200 rounded-lg shadow-lg">
+            <Image
+            src={pokelogo.src}
+            alt="Poke Logo"
+            width="148"
+            height="148"
+            className="filter drop-shadow-lg mx-auto md:ml-0"/>
             <SearchClient />
 
             <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -48,13 +53,14 @@ async function PokemonCard({ name }: { name: string }) {
     const idFromName = await IdFromName(name);
 
     return (
-        <a href={`/pokedex/${name}`} className="block border rounded p-3 hover:shadow">
+        <a href={`/pokedex/${name}`} className="block border rounded p-3 hover:shadow bg-gray-100">
             <Image 
                 src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${idFromName}.png`}
                 alt={name}
-                width={128}
-                height={128}
-                className="w-full h-32 object-contain"
+                width={148}
+                height={148}
+                className="w-full h-32 object-contain filter drop-shadow-sm"
+                
             />
         </a>
     );
