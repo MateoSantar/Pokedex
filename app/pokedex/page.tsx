@@ -16,13 +16,13 @@ export default async function Pokedex({
     
 
     return (
-        <main className="max-w-4xl mx-auto p-6 space-y-4">
+        <main className="max-w-4xl mx-auto my-4 p-4 space-y-4 bg-blue-200 rounded-lg shadow-lg">
             <Image
             src={pokelogo.src}
             alt="Poke Logo"
             width="148"
             height="148"
-            className="filter drop-shadow-lg"/>
+            className="filter drop-shadow-lg mx-auto md:ml-0"/>
             <SearchClient />
 
             <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
