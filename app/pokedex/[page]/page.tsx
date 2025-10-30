@@ -1,30 +1,43 @@
 // app/pokedex/[name]/page.tsx
 import Link from 'next/link';
-import { getPokemon } from '@/app/lib/pokeapi';
+import Image from 'next/image';
+import { getPokemon, PokemonDetail } from '@/app/lib/pokeapi';
 import StatsBar from '@/app/components/stats-bar';
+import Error from '../error';
 export default async function PokemonPage({ params }: { params: Promise<{ page: string }> }) {
   const parameters = await params;
-  const p = await getPokemon(parameters.page);
+  let p: PokemonDetail;
+  try {
+    p = await getPokemon(parameters.page);
+
+
+  } catch (error) {
+    return <Error error={error as Error} />
+  }
 
 
   return (
-    <main className="max-w-2xl mx-auto p-6 space-y-4 bg-gray-100 rounded shadow">
+    <main className="max-w-2xl mx-auto p-6 space-y-4 bg-gray-200 rounded shadow mt-5">
       <Link href="/pokedex" className="text-sm underline bg-blue-200 p-3 shadow rounded-full">
         ← Volver
       </Link>
 
-      <header className={`flex items-center gap-4 mt-3`}>
+      <header className={`flex flex-col md:flex-row items-center gap-4 mt-5 bg-gray-30 rounded-lg shadow`}>
         {p.sprites.front_default && (
-          <img
-            src={p.sprites.front_default}
-            alt={p.name}
-            width={96}
-            height={96}
-          />
+          <div className="relative w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32">
+            <Image
+              src={p.sprites.front_default as string}
+              alt={p.name}
+              fill
+              className="object-contain"
+              unoptimized
+            />
+          </div>
+
         )}
 
         <div>
-          <h1 className="text-2xl font-semibold capitalize">{p.name}</h1>
+          <h1 className="text-2xl font-semibold capitalize text-center md:text-left">{p.name}</h1>
           <p className="text-sm text-gray-500">
             Tipos: {p.types.map(t => t.type.name).join(', ')} — Altura: {p.height / 10} m — Peso: {p.weight / 10} kg
           </p>
@@ -32,8 +45,8 @@ export default async function PokemonPage({ params }: { params: Promise<{ page: 
       </header>
 
       <section>
-        <h2 className="font-medium mb-2">Base stats</h2>
-        <div className="bg-blue-100 rounded p-5 grid grid-cols-2 gap-3">
+        <h2 className="font-medium mb-2 text-center">Base stats</h2>
+        <div className="bg-blue-100 rounded p-5 grid grid-cols-1 md:grid-cols-2 gap-3 ">
           {p.stats.map(s => (
             <StatsBar
               key={s.stat.name}

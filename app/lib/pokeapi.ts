@@ -1,9 +1,9 @@
-export const API_URL = " https://pokeapi.co/api/v2";
+export const API_URL = "https://pokeapi.co/api/v2";
 
 export type PokemonDetail = {
     name: string;
     sprites: { front_default: string | null };
-    types: { slot: number; type: string }[];
+    types: { slot: number; type: { name: string } }[];
     height: number;
     weight: number;
     stats: { base_stat: number; stat: { name: string } }[];
@@ -29,7 +29,7 @@ export async function getPokemonPage(limit = 20, offset = 0): Promise<PokemonLis
 }
 
 
-export async function getPokemon(name: string){
+export async function getPokemon(name: string): Promise<PokemonDetail>{
     const poke_data = await fetch(`${API_URL}/pokemon/${name}`,
         {
             next: { revalidate: 60 }
@@ -37,6 +37,7 @@ export async function getPokemon(name: string){
     );
     
     if (!poke_data.ok) throw new Error('Not found');
-    return poke_data.json();
+    const data = await poke_data.json();
+    return data as PokemonDetail;
 }
 

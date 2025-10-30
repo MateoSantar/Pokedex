@@ -1,5 +1,6 @@
 import { getPokemonPage, API_URL } from "@/app/lib/pokeapi";
 import Link from "next/link";
+import Image from "next/image";
 import SearchClient from "./SearchClient";
 function getOffset(params: { page?: string }) {
     const page = Number(params.page ?? '1');
@@ -19,7 +20,7 @@ export default async function Pokedex({
 
             <SearchClient />
 
-            <ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {data.results.map((p) => (
                 <li key={p.name}>
                     <PokemonCard name={p.name} />
@@ -48,8 +49,11 @@ async function PokemonCard({ name }: { name: string }) {
 
     return (
         <a href={`/pokedex/${name}`} className="block border rounded p-3 hover:shadow">
-            <div className="text-sm text-gray-500">{name}</div>
-            <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${idFromName}.png`} alt={name}
+            <Image 
+                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${idFromName}.png`}
+                alt={name}
+                width={128}
+                height={128}
                 className="w-full h-32 object-contain"
             />
         </a>
